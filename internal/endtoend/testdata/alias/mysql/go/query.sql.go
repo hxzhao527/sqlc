@@ -18,3 +18,13 @@ func (q *Queries) AliasBar(ctx context.Context, id uint64) error {
 	_, err := q.db.ExecContext(ctx, aliasBar, id)
 	return err
 }
+
+const aliasBarCasInsensitive = `-- name: AliasBarCasInsensitive :exec
+DELETE FROM bar B
+WHERE B.id = ?
+`
+
+func (q *Queries) AliasBarCasInsensitive(ctx context.Context, id uint64) error {
+	_, err := q.db.ExecContext(ctx, aliasBarCasInsensitive, id)
+	return err
+}

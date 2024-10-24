@@ -1309,7 +1309,7 @@ func (c *cc) convertTableSource(node *pcast.TableSource) ast.Node {
 	if node == nil {
 		return nil
 	}
-	alias := node.AsName.String()
+	alias := identifier(node.AsName.String())
 	switch n := node.Source.(type) {
 
 	case *pcast.SelectStmt, *pcast.SetOprStmt:
