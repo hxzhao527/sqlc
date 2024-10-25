@@ -31,7 +31,6 @@ func (comp *Compiler) resolveCatalogRefs(qc *QueryCatalog, rvs []*ast.RangeVar, 
 
 	typeMap := map[string]map[string]map[string]*catalog.Column{}
 	indexTable := func(table catalog.Table) error {
-		tables = append(tables, table.Rel)
 		if defaultTable == nil {
 			defaultTable = table.Rel
 		}
@@ -42,7 +41,13 @@ func (comp *Compiler) resolveCatalogRefs(qc *QueryCatalog, rvs []*ast.RangeVar, 
 		if _, exists := typeMap[schema]; !exists {
 			typeMap[schema] = map[string]map[string]*catalog.Column{}
 		}
+
+		if _, exists := typeMap[schema][table.Rel.Name]; exists {
+			return nil
+		}
+		tables = append(tables, table.Rel)
 		typeMap[schema][table.Rel.Name] = map[string]*catalog.Column{}
+
 		for _, c := range table.Columns {
 			cc := c
 			typeMap[schema][table.Rel.Name][c.Name] = cc
